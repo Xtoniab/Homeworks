@@ -6,56 +6,72 @@ namespace ShootEmUp
     public sealed class EnemyPool : MonoBehaviour
     {
         [Header("Spawn")]
-        [SerializeField]
-        private EnemyPositions enemyPositions;
-
-        [SerializeField]
-        private GameObject character;
-
-        [SerializeField]
-        private Transform worldTransform;
+        [SerializeField] private EnemyPositions enemyPositions;
+        [SerializeField] private GameObject character;
+        [SerializeField] private BulletSystem bulletSystem;
+        [SerializeField] private Transform worldTransform;
 
         [Header("Pool")]
-        [SerializeField]
-        private Transform container;
+        [SerializeField] private int initialPoolSize = 7;
+        [SerializeField] private Transform container;
+        [SerializeField] private Character prefab;
 
-        [SerializeField]
-        private GameObject prefab;
-
-        private readonly Queue<GameObject> enemyPool = new();
+        private readonly Queue<Character> pooledEnemies = new();
         
         private void Awake()
         {
-            for (var i = 0; i < 7; i++)
+            WarmupPool();
+        }
+
+        private void WarmupPool()
+        {
+            for (var i = 0; i < initialPoolSize; i++)
             {
-                var enemy = Instantiate(this.prefab, this.container);
-                this.enemyPool.Enqueue(enemy);
+                InstantiateAndPoolNewEnemy();
             }
         }
 
-        public GameObject SpawnEnemy()
+        private void InstantiateAndPoolNewEnemy()
         {
-            if (!this.enemyPool.TryDequeue(out var enemy))
+            var enemy = Instantiate(this.prefab, this.container);
+            this.pooledEnemies.Enqueue(enemy);
+        }
+
+        public Character Get()
+        {
+            if (!this.enemyPositions.HasAvailableAttackPositions)
             {
                 return null;
             }
+            
+            if (this.pooledEnemies.Count == 0)
+            {
+                InstantiateAndPoolNewEnemy();
+            }
+            
+            var enemy = this.pooledEnemies.Dequeue();
 
             enemy.transform.SetParent(this.worldTransform);
 
             var spawnPosition = this.enemyPositions.RandomSpawnPosition();
             enemy.transform.position = spawnPosition.position;
             
-            var attackPosition = this.enemyPositions.RandomAttackPosition();
-            enemy.GetComponent<EnemyMoveAgent>().SetDestination(attackPosition.position);
-
-            enemy.GetComponent<EnemyAttackAgent>().SetTarget(this.character);
+            var attackPosition = this.enemyPositions.AcquireRandomAttackPosition();
+            
+            enemy.GetComponent<Character>().Construct(bulletSystem);
+            enemy.GetComponent<EnemyCharacterController>().Construct(attackPosition, this.character);
             return enemy;
         }
 
-        public void UnspawnEnemy(GameObject enemy)
+        public void Pool(Character enemy)
         {
+            enemy.Reset();
+
+            var attackPosition = enemy.GetComponent<EnemyCharacterController>().AttackPosition;
+            this.enemyPositions.ReleaseAttackPosition(attackPosition);
+            
             enemy.transform.SetParent(this.container);
-            this.enemyPool.Enqueue(enemy);
+            this.pooledEnemies.Enqueue(enemy);
         }
     }
 }

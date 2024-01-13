@@ -7,18 +7,32 @@ namespace ShootEmUp
     {
         public event Action<Bullet, Collision2D> OnCollisionEntered;
 
-        [NonSerialized] public bool isPlayer;
-        [NonSerialized] public int damage;
+        [SerializeField] private new Rigidbody2D rigidbody2D;
+        [SerializeField] private SpriteRenderer spriteRenderer;
 
-        [SerializeField]
-        private new Rigidbody2D rigidbody2D;
-
-        [SerializeField]
-        private SpriteRenderer spriteRenderer;
+        public TeamTag TeamTag { get; private set; }
+        public int Damage { get; private set; }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
             this.OnCollisionEntered?.Invoke(this, collision);
+        }
+        
+        public void SetTeamTag(TeamTag teamTag)
+        {
+            this.TeamTag = teamTag;
+        }
+        
+        public void SetDamage(int damage)
+        {
+            if (damage >= 0)
+            {
+                this.Damage = damage;
+            }
+            else
+            {
+                throw new ArgumentException("Damage can't be negative");
+            }
         }
 
         public void SetVelocity(Vector2 velocity)
