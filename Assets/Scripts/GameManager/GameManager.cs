@@ -5,9 +5,11 @@ namespace ShootEmUp
 {
     public sealed class GameManager : MonoBehaviour
     {
+        public event Action OnGameStart;
+        public event Action OnGameFinish;
+        
         [SerializeField] private BulletSystem bulletSystem;
         [SerializeField] private Character playerCharacter;
-        [SerializeField] private EnemySpawner enemySpawner;
         
         private void Awake()
         {
@@ -16,7 +18,7 @@ namespace ShootEmUp
 
         private void Start()
         {
-            enemySpawner.StartSpawnLoop();
+            OnGameStart?.Invoke();
         }
 
         private void OnEnable()
@@ -31,11 +33,10 @@ namespace ShootEmUp
 
         public void FinishGame()
         {
-            playerCharacter.OnDeath -= FinishGame;
-            
             Debug.Log("Game over!");
-            enemySpawner.TryStopSpawnLoop();
             Time.timeScale = 0;
+            
+            OnGameFinish?.Invoke();
         }
     }
 }

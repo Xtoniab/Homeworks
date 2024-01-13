@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,8 +8,21 @@ namespace ShootEmUp
     {
         [SerializeField] private float spawnDelay = 1f;
         [SerializeField] private EnemyPool enemyPool;
-
+        [SerializeField] private GameManager gameManager;
+        
         private Coroutine enemySpawnLoop;
+
+        private void OnEnable()
+        {
+            gameManager.OnGameStart += StartSpawnLoop;
+            gameManager.OnGameFinish += TryStopSpawnLoop;
+        }
+        
+        private void OnDisable()
+        {
+            gameManager.OnGameStart -= StartSpawnLoop;
+            gameManager.OnGameFinish -= TryStopSpawnLoop;
+        }
 
         public void StartSpawnLoop()
         {
