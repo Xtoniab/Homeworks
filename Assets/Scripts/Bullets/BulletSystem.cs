@@ -7,26 +7,26 @@ namespace ShootEmUp
     public sealed class BulletSystem : MonoBehaviour
     {
         [SerializeField] private LevelBounds levelBounds;
-        [SerializeField] private BulletFactory bulletFactory;
-
-        private readonly HashSet<Bullet> activeBullets = new();
+        [SerializeField] private BulletCreator bulletCreator;
         
+        private readonly HashSet<Bullet> activeBullets = new();
+
         public void SpawnBullet(BulletSpawnOptions options)
         {
-            var bullet = this.bulletFactory.CreateBullet(options);
-            
+            var bullet = this.bulletCreator.Create(options);
+
             if (this.activeBullets.Add(bullet))
             {
-                bullet.OnCollisionEntered += this.OnBulletCollision;
+                bullet.OnHit += this.OnBulletHit;
             }
         }
-        
+
         public void RemoveBullet(Bullet bullet)
         {
             if (this.activeBullets.Remove(bullet))
             {
-                bullet.OnCollisionEntered -= this.OnBulletCollision;
-                this.bulletFactory.Pool(bullet);
+                bullet.OnHit -= this.OnBulletHit;
+                bullet.PoolSelf();
             }
         }
 
@@ -46,26 +46,9 @@ namespace ShootEmUp
             }
         }
 
-        private void OnBulletCollision(Bullet bullet, Collision2D collision)
+        private void OnBulletHit(Bullet bullet)
         {
-            var other = collision.gameObject;
-            
-            if (!other.TryGetComponent(out TeamComponent team))
-            {
-                return;
-            }
-
-            if (bullet.TeamTag == team.TeamTag)
-            {
-                return;
-            }
-
-            if (other.TryGetComponent(out HealthComponent health))
-            {
-                health.TakeDamage(bullet.Damage);
-            }
-            
-            this.RemoveBullet(bullet);
+            RemoveBullet(bullet);
         }
     }
 }

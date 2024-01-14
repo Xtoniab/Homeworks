@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf643e12346a4c3d885f8193f8224ef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 945074247754710308}
+  shipComponent: {fileID: 945074247754710308}
   moveAgent: {fileID: 8186052948131603766}
   attackAgent: {fileID: 6896809305229427933}
 --- !u!114 &5568771391735819379

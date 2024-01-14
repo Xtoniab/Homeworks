@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyAttackAgent : MonoBehaviour
+    public sealed class AttackAgent : MonoBehaviour
     {
         public event Action<GameObject> OnFire;
         

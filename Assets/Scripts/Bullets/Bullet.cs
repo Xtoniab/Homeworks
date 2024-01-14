@@ -1,58 +1,63 @@
 using System;
+using Pool;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class Bullet : MonoBehaviour
+    public sealed class Bullet : PoolObject
     {
-        public event Action<Bullet, Collision2D> OnCollisionEntered;
+        public event Action<Bullet> OnHit;
 
         [SerializeField] private new Rigidbody2D rigidbody2D;
         [SerializeField] private SpriteRenderer spriteRenderer;
 
-        public TeamTag TeamTag { get; private set; }
-        public int Damage { get; private set; }
+        private TeamTag teamTag;
+        private int damage;
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            this.OnCollisionEntered?.Invoke(this, collision);
+            TryDealDamage(collision.gameObject);
         }
-        
-        public void SetTeamTag(TeamTag teamTag)
+
+        private bool TryDealDamage(GameObject target)
         {
-            this.TeamTag = teamTag;
+            if (!target.TryGetComponent(out TeamComponent team))
+            {
+                return false;
+            }
+
+            if (this.teamTag == team.TeamTag)
+            {
+                return false;
+            }
+
+            if (target.TryGetComponent(out HealthComponent health))
+            {
+                health.TakeDamage(this.damage);
+            }
+            
+            OnHit?.Invoke(this);
+
+            return true;
         }
-        
+
+
         public void SetDamage(int damage)
         {
             if (damage >= 0)
             {
-                this.Damage = damage;
+                this.damage = damage;
             }
             else
             {
                 throw new ArgumentException("Damage can't be negative");
             }
         }
-
-        public void SetVelocity(Vector2 velocity)
-        {
-            this.rigidbody2D.velocity = velocity;
-        }
-
-        public void SetPhysicsLayer(int physicsLayer)
-        {
-            this.gameObject.layer = physicsLayer;
-        }
-
-        public void SetPosition(Vector3 position)
-        {
-            this.transform.position = position;
-        }
-
-        public void SetColor(Color color)
-        {
-            this.spriteRenderer.color = color;
-        }
+        
+        public void SetTeamTag(TeamTag teamTag) => this.teamTag = teamTag;
+        public void SetVelocity(Vector2 velocity) => this.rigidbody2D.velocity = velocity;
+        public void SetPhysicsLayer(int physicsLayer) => this.gameObject.layer = physicsLayer;
+        public void SetPosition(Vector3 position) => this.transform.position = position;
+        public void SetColor(Color color) => this.spriteRenderer.color = color;
     }
 }

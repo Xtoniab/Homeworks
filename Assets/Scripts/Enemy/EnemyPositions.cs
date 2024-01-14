@@ -23,7 +23,7 @@ namespace ShootEmUp
             return this.spawnPositions.PickRandomElement();
         }
 
-        public Transform AcquireRandomAttackPosition()
+        public AttackPositionHandle AcquireRandomAttackPosition()
         {
             if (availableAttackPositions.Count == 0)
             {
@@ -34,10 +34,10 @@ namespace ShootEmUp
             var attackPosition = availableAttackPositions.PickRandomElement();
             availableAttackPositions.Remove(attackPosition);
 
-            return attackPosition;
+            return new AttackPositionHandle(attackPosition, AddAvailableAttackPosition);
         }
         
-        public void ReleaseAttackPosition(Transform attackPosition)
+        public void AddAvailableAttackPosition(Transform attackPosition)
         {
             if (attackPosition != null)
             {

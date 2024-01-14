@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,7 +6,7 @@ namespace ShootEmUp
     public sealed class EnemySpawner : MonoBehaviour
     {
         [SerializeField] private float spawnDelay = 1f;
-        [SerializeField] private EnemyPool enemyPool;
+        [SerializeField] private EnemyCreator enemyCreator;
         [SerializeField] private GameManager gameManager;
         
         private Coroutine enemySpawnLoop;
@@ -43,11 +42,7 @@ namespace ShootEmUp
             while (true)
             {
                 yield return new WaitForSeconds(spawnDelay);
-                var enemy = this.enemyPool.Get();
-                if (enemy != null)
-                {
-                    enemy.OnDeath += () => enemyPool.Pool(enemy);
-                }
+                this.enemyCreator.TryCreate(out _);
             }
         }
     }

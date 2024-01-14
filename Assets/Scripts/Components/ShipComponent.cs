@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class Character : MonoBehaviour
+    public class ShipComponent : MonoBehaviour
     {
         public event Action OnDeath;
 
@@ -45,7 +45,6 @@ namespace ShootEmUp
 
         public void Reset()
         {
-            OnDeath = null;
             health.Reset();
         }
 

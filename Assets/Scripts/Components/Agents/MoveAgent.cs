@@ -2,25 +2,23 @@ using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyMoveAgent : MonoBehaviour
+    public sealed class MoveAgent : MonoBehaviour
     {
         private const float TargetPositionToleranceSqr = 0.25f * 0.25f;
         
-        public bool IsReached => this.isReached;
+        public bool IsReached { get; private set; }
         
         private Vector2 destination;
-
-        private bool isReached;
         
         public void SetDestination(Vector2 endPoint)
         {
             this.destination = endPoint;
-            this.isReached = false;
+            this.IsReached = false;
         }
         
         public Vector2 GetMoveDirection()
         {
-            if (this.isReached)
+            if (this.IsReached)
             {
                 return Vector2.zero;
             }
@@ -28,7 +26,7 @@ namespace ShootEmUp
             var vector = this.destination - (Vector2) this.transform.position;
             if (vector.sqrMagnitude <= TargetPositionToleranceSqr)
             {
-                this.isReached = true;
+                this.IsReached = true;
                 return Vector2.zero;
             }
 
