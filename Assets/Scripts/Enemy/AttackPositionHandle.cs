@@ -10,6 +10,8 @@ namespace ShootEmUp
         private readonly Transform attackPosition;
         private readonly Action<Transform> releaseAction;
         
+        private bool isReleased;
+        
         public AttackPositionHandle(Transform attackPosition, Action<Transform> releaseAction)
         {
             this.attackPosition = attackPosition;
@@ -18,7 +20,13 @@ namespace ShootEmUp
         
         public void Release()
         {
+            if (isReleased)
+            {
+                throw new Exception("Attack position is already released!");
+            }
+            
             releaseAction?.Invoke(attackPosition);
+            isReleased = true;
         }
     }
 }
