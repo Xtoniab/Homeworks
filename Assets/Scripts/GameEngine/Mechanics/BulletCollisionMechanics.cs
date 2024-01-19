@@ -8,7 +8,7 @@ namespace GameEngine.Mechanics
     {
         private readonly IAtomicValue<float> damage;
         private readonly IAtomicVariable<bool> isBulletAlive;
-        
+
         public BulletCollisionMechanics(IAtomicValue<float> damage, IAtomicVariable<bool> isBulletAlive)
         {
             this.damage = damage;
@@ -17,14 +17,19 @@ namespace GameEngine.Mechanics
 
         public void OnTriggerEnter(Collider collider)
         {
-            if(collider.TryGetComponent(out AtomicObject atomicObject))
+            if (isBulletAlive.Value == false)
             {
-                if(atomicObject.TryGet(ObjectApi.TakeDamageEvent, out IAtomicEvent<float> takeDamageEvent))
+                return;
+            }
+
+            if (collider.TryGetComponent(out AtomicObject atomicObject))
+            {
+                if (atomicObject.TryGet(ObjectApi.TakeDamageEvent, out IAtomicEvent<float> takeDamageEvent))
                 {
                     takeDamageEvent.Invoke(damage.Value);
                 }
             }
-            
+
             isBulletAlive.Value = false;
         }
     }
