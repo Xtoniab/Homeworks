@@ -1,4 +1,5 @@
 ﻿using Atomic.Elements;
+using Atomic.Extensions;
 using Atomic.Objects;
 using GameEngine;
 using InputManagement;
@@ -23,7 +24,7 @@ namespace Controllers
 
         private void Fire()
         {
-            character.Get<IAtomicEvent>(ObjectApi.FireEvent).Invoke();
+            character.InvokeAction(ObjectApi.FireAction);
         }
     }
 }

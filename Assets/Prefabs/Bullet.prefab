@@ -150,18 +150,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c14d65d0ddaf4de6a1295f093c6d344a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifetimeSeconds:
-    value: 5
   damage:
     value: 1
-  transform: {fileID: 5596066293772299526}
-  speed:
-    value: 1
-  direction:
-    value: {x: 0, y: 0, z: 1}
-  isAlive:
-    value: 1
-  hitPoints:
-    value: 5
-  damagePerSecond:
-    value: 1
+  hitTarget:
+    value: 0
+  moveComponent:
+    transform: {fileID: 5596066293772299526}
+    speed:
+      value: 1
+    direction:
+      value: {x: 0, y: 0, z: 1}
+  timedLifeComponent:
+    lifeTimeSeconds:
+      value: 5
+    isAlive:
+      value: 1
+    timerComponent:
+      timeLeft:
+        value: 1

@@ -1,4 +1,5 @@
 ﻿using Atomic.Elements;
+using Atomic.Extensions;
 using Atomic.Objects;
 using GameEngine;
 using UnityEngine;
@@ -11,15 +12,15 @@ namespace Controllers
         
         private void OnEnable()
         {
-            character.Get<IAtomicObservable<bool>>(ObjectApi.IsAlive).Subscribe(OnDeath);
+            character.GetObservable<bool>(ObjectApi.IsAlive).Subscribe(OnAliveChanged);
         }
         
         private void OnDisable()
         {
-            character.Get<IAtomicObservable<bool>>(ObjectApi.IsAlive).Unsubscribe(OnDeath);
+            character.GetObservable<bool>(ObjectApi.IsAlive).Unsubscribe(OnAliveChanged);
         }
 
-        private void OnDeath(bool isAlive)
+        private void OnAliveChanged(bool isAlive)
         {
             if (!isAlive)
             {

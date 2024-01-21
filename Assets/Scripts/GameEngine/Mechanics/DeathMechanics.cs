@@ -4,10 +4,10 @@ namespace GameEngine.Mechanics
 {
     public class DeathMechanics
     {
-        private readonly IAtomicObservable<float> hitPoints;
+        private readonly IAtomicObservable<int> hitPoints;
         private readonly IAtomicVariable<bool> isAlive;
         
-        public DeathMechanics(IAtomicObservable<float> hitPoints, IAtomicVariable<bool> isAlive)
+        public DeathMechanics(IAtomicObservable<int> hitPoints, IAtomicVariable<bool> isAlive)
         {
             this.hitPoints = hitPoints;
             this.isAlive = isAlive;
@@ -23,7 +23,7 @@ namespace GameEngine.Mechanics
             hitPoints.Unsubscribe(OnHitPointsChanged);
         }
 
-        private void OnHitPointsChanged(float hitPoints)
+        private void OnHitPointsChanged(int hitPoints)
         {
             if (hitPoints <= 0)
             {

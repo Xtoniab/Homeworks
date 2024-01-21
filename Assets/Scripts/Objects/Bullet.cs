@@ -1,7 +1,7 @@
-﻿using System;
-using Atomic.Elements;
+﻿using Atomic.Elements;
 using Atomic.Objects;
 using GameEngine;
+using GameEngine.Components;
 using GameEngine.Mechanics;
 using UnityEngine;
 
@@ -9,67 +9,50 @@ namespace Objects
 {
     public class Bullet: AtomicObject
     {
-        [Header("Bullet")]
-        [SerializeField] private AtomicValue<float> lifetimeSeconds = new(5f);
-        [SerializeField] private AtomicValue<float> damage = new(1f);
+        [Get(ObjectApi.IsAlive), SerializeField] private AtomicFunction<bool> isAlive = new();
+        [SerializeField] private AtomicValue<int> damage = new(1);
+        [SerializeField] private AtomicVariable<bool> hitTarget;
+        
+        [SerializeField] private MoveComponent moveComponent = new();
+        [SerializeField] private TimedLifeComponent timedLifeComponent = new();
+        
         private BulletCollisionMechanics bulletCollisionMechanics;
-        
-        [Header("Movement")] 
-        [SerializeField] private Transform transform;
-        [SerializeField] private AtomicValue<float> speed = new(1f);
-        [SerializeField] private AtomicVariable<Vector3> direction = new(Vector3.forward);
-        private MoveMechanics moveMechanics;
-        
-        [Header("Health")]
-        [Get(ObjectApi.IsAlive), SerializeField] private AtomicVariable<bool> isAlive = new(true);
-        [SerializeField] private AtomicVariable<float> hitPoints;
-        [SerializeField] private AtomicEvent<float> takeDamageEvent;
-        private TakeDamageMechanics takeDamageMechanics;
-        private DeathMechanics deathMechanics;
-        
-        [Header("Time Damage")]
-        [SerializeField] private AtomicValue<float> damagePerSecond = new(1f);
-        private TimeDamageMechanics timeDamageMechanics;
-        
-        public Bullet Construct()
+
+        public override void Compose()
         {
             base.Compose();
             
-            moveMechanics = new MoveMechanics(transform, speed, direction, canMove: isAlive);
-            takeDamageMechanics = new TakeDamageMechanics(takeDamageEvent, hitPoints);
-            timeDamageMechanics = new TimeDamageMechanics(takeDamageEvent, damagePerSecond);
-            deathMechanics = new DeathMechanics(hitPoints, isAlive);
-            bulletCollisionMechanics = new BulletCollisionMechanics(damage, isAlive);
-            return this;
+            timedLifeComponent.Compose();
+            
+            moveComponent.Compose();
+            moveComponent.MoveEnabled.Append(timedLifeComponent.IsAlive);
+            
+            isAlive.Compose(() => !hitTarget.Value && timedLifeComponent.IsAlive.Value);
+
+            bulletCollisionMechanics = new BulletCollisionMechanics(damage, hitTarget);
         }
         
         public void Reset()
         {
-            isAlive.Value = true;
-            hitPoints.Value = lifetimeSeconds.Value;
-        }
-
-        private void OnEnable()
-        {
-            takeDamageMechanics.OnEnable();
-            deathMechanics.OnEnable();
-        }
-        
-        private void OnDisable()
-        {
-            takeDamageMechanics.OnDisable();
-            deathMechanics.OnDisable();
+            hitTarget.Value = false;
+            timedLifeComponent.Reset();
         }
         
         private void FixedUpdate()
         {
-            moveMechanics.FixedUpdate();
-            timeDamageMechanics.FixedUpdate();
+            moveComponent.FixedUpdate();
+            timedLifeComponent.FixedUpdate();
         }
 
         private void OnTriggerEnter(Collider other)
         {
             bulletCollisionMechanics.OnTriggerEnter(other);
+        }
+
+        private void OnDestroy()
+        {
+            hitTarget?.Dispose();
+            timedLifeComponent?.Dispose();
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Systems
 {
-    public class BulletSpawner : MonoBehaviour
+    internal class BulletSpawner : MonoBehaviour
     {
         [SerializeField] private BulletPool bulletPool;
         [SerializeField] private Transform worldTransform;

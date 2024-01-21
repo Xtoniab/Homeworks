@@ -6,31 +6,31 @@ namespace GameEngine.Mechanics
 {
     public class BulletCollisionMechanics
     {
-        private readonly IAtomicValue<float> damage;
-        private readonly IAtomicVariable<bool> isBulletAlive;
+        private readonly IAtomicValue<int> damage;
+        private readonly IAtomicVariable<bool> hitTarget;
 
-        public BulletCollisionMechanics(IAtomicValue<float> damage, IAtomicVariable<bool> isBulletAlive)
+        public BulletCollisionMechanics(IAtomicValue<int> damage, IAtomicVariable<bool> hitTarget)
         {
             this.damage = damage;
-            this.isBulletAlive = isBulletAlive;
+            this.hitTarget = hitTarget;
         }
 
         public void OnTriggerEnter(Collider collider)
         {
-            if (isBulletAlive.Value == false)
+            if (hitTarget.Value)
             {
                 return;
             }
 
             if (collider.TryGetComponent(out AtomicObject atomicObject))
             {
-                if (atomicObject.TryGet(ObjectApi.TakeDamageEvent, out IAtomicEvent<float> takeDamageEvent))
+                if (atomicObject.TryGet(ObjectApi.TakeDamageAction, out IAtomicAction<int> takeDamageAction))
                 {
-                    takeDamageEvent.Invoke(damage.Value);
+                    takeDamageAction.Invoke(damage.Value);
                 }
             }
 
-            isBulletAlive.Value = false;
+            hitTarget.Value = true;
         }
     }
 }

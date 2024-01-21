@@ -97,11 +97,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e8669694bf74124b07f8b281b805053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAlive:
-    value: 1
-  hitPoints:
-    value: 5
-  firePoint: {fileID: 8712536558973914364}
+  healthComponent:
+    isAlive:
+      value: 1
+    hitPoints:
+      value: 5
+  weaponComponent:
+    firePoint: {fileID: 8712536558973914364}
 --- !u!114 &4654709528957350269
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Systems
 {
-    public class BulletPool: MonoBehaviour
+    internal class BulletPool: MonoBehaviour
     {
         [SerializeField] private Bullet prefab;
         [SerializeField] private int initialSize = 10;
@@ -27,7 +27,8 @@ namespace Systems
 
         private void InstantiateAndPoolNewBullet()
         {
-            var newBullet = Instantiate(prefab, container).Construct();
+            var newBullet = Instantiate(prefab, container);
+            newBullet.Compose();
             pooledBullets.Enqueue(newBullet);
         }
 

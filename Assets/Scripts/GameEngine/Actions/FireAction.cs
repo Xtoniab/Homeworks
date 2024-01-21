@@ -12,8 +12,8 @@ namespace GameEngine.Actions
     {
         private BulletSystem bulletSystem;
         private Transform firePoint;
-        
-        public FireAction(BulletSystem bulletSystem, Transform firePoint)
+
+        public void Compose(BulletSystem bulletSystem, Transform firePoint)
         {
             this.bulletSystem = bulletSystem;
             this.firePoint = firePoint;

@@ -12,7 +12,7 @@ namespace Controllers
 
         private void Awake()
         {
-            characters.ForEach(x => x.Construct(bulletSystem));
+            characters.ForEach(x => x.Compose(bulletSystem));
         }
     }
 }
