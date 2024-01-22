@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Atomic.Elements;
 using Sirenix.OdinInspector;
 using Systems;
@@ -10,19 +9,26 @@ namespace GameEngine.Actions
     [Serializable]
     public class FireAction: IAtomicAction
     {
-        private BulletSystem bulletSystem;
-        private Transform firePoint;
+        private IAtomicValue<bool> canFire;
+        private IAtomicEvent fireEvent;
 
-        public void Compose(BulletSystem bulletSystem, Transform firePoint)
+        public void Compose(
+            IAtomicValue<bool> canFire,
+            IAtomicEvent fireEvent)
         {
-            this.bulletSystem = bulletSystem;
-            this.firePoint = firePoint;
+            this.canFire = canFire;
+            this.fireEvent = fireEvent;
         }
         
         [Button]
         public void Invoke()
         {
-            bulletSystem.SpawnBullet(firePoint.position, firePoint.rotation);
+            if (canFire.Value == false)
+            {
+                return;
+            }
+            
+            fireEvent.Invoke();
         }
     }
 }

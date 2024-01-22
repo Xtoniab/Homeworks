@@ -8,11 +8,16 @@ namespace GameEngine.Mechanics
     {
         private readonly IAtomicValue<int> damage;
         private readonly IAtomicVariable<bool> hitTarget;
+        private readonly IAtomicAction<AtomicObject> dealDamageAction;
 
-        public BulletCollisionMechanics(IAtomicValue<int> damage, IAtomicVariable<bool> hitTarget)
+        public BulletCollisionMechanics(
+            IAtomicValue<int> damage,
+            IAtomicVariable<bool> hitTarget,
+            IAtomicAction<AtomicObject> dealDamageAction)
         {
             this.damage = damage;
             this.hitTarget = hitTarget;
+            this.dealDamageAction = dealDamageAction;
         }
 
         public void OnTriggerEnter(Collider collider)
@@ -24,10 +29,7 @@ namespace GameEngine.Mechanics
 
             if (collider.TryGetComponent(out AtomicObject atomicObject))
             {
-                if (atomicObject.TryGet(ObjectApi.TakeDamageAction, out IAtomicAction<int> takeDamageAction))
-                {
-                    takeDamageAction.Invoke(damage.Value);
-                }
+               dealDamageAction.Invoke(atomicObject);
             }
 
             hitTarget.Value = true;

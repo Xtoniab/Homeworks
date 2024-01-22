@@ -2,7 +2,7 @@ using System;
 
 namespace Atomic.Elements
 {
-    internal static class AtomicUtils
+    public static class AtomicUtils
     {
         public static void Dispose(ref Action action)
         {

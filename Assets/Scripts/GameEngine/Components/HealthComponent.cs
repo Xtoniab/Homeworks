@@ -10,6 +10,9 @@ namespace GameEngine.Components
     [Serializable]
     public class HealthComponent
     {
+        public IAtomicValue<bool> IsAlive => isAlive;
+        public IAtomicObservable DeathEvent => deathEvent;
+
         [Get(ObjectApi.IsAlive), SerializeField] 
         private AtomicVariable<bool> isAlive = new(true);
         
@@ -19,13 +22,16 @@ namespace GameEngine.Components
         [SerializeField]
         private AtomicVariable<int> hitPoints = new(5);
         
+        [SerializeField]
+        private AtomicEvent deathEvent = new();
+        
         private DeathMechanics deathMechanics;
         
         public void Compose()
         {
             takeDamageAction.Compose(hitPoints);
             
-            deathMechanics = new DeathMechanics(hitPoints, isAlive);
+            deathMechanics = new DeathMechanics(hitPoints, isAlive, deathEvent);
         }
         
         public void OnEnable()

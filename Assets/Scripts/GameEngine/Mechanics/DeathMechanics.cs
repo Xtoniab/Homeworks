@@ -6,11 +6,13 @@ namespace GameEngine.Mechanics
     {
         private readonly IAtomicObservable<int> hitPoints;
         private readonly IAtomicVariable<bool> isAlive;
+        private readonly IAtomicEvent deathEvent;
         
-        public DeathMechanics(IAtomicObservable<int> hitPoints, IAtomicVariable<bool> isAlive)
+        public DeathMechanics(IAtomicObservable<int> hitPoints, IAtomicVariable<bool> isAlive, IAtomicEvent deathEvent)
         {
             this.hitPoints = hitPoints;
             this.isAlive = isAlive;
+            this.deathEvent = deathEvent;
         }
 
         public void OnEnable()
@@ -25,9 +27,11 @@ namespace GameEngine.Mechanics
 
         private void OnHitPointsChanged(int hitPoints)
         {
-            if (hitPoints <= 0)
+            isAlive.Value = hitPoints > 0;
+
+            if (!isAlive.Value)
             {
-                isAlive.Value = false;
+                deathEvent.Invoke();
             }
         }
     }

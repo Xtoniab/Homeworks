@@ -1,4 +1,5 @@
-﻿using Atomic.Elements;
+﻿using System;
+using Atomic.Elements;
 using Atomic.Extensions;
 using Atomic.Objects;
 using GameEngine;
@@ -20,6 +21,12 @@ namespace Controllers
         private void OnDisable()
         {
             inputManager.OnFire -= Fire;
+        }
+
+        private void FixedUpdate()
+        {
+            var direction = new Vector3(inputManager.MoveDirection.x, 0, inputManager.MoveDirection.y);
+            character.GetVariable<Vector3>(ObjectApi.MoveDirection).Value = direction;
         }
 
         private void Fire()
