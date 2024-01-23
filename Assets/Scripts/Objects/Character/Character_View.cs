@@ -16,7 +16,7 @@ namespace Objects
         private LookRotationMechanics lookRotationMechanics;
         private CharacterMoveAnimMechanics moveAnimMechanics;
         private CharacterFireAnimMechanics fireAnimMechanics;
-        private ShowMuzzleFlashMechanics showMuzzleFlashMechanics;
+        private PlayParticlesOnEventMechanics showMuzzleFlashMechanics;
         private PlaySoundByEventMechanics playShotSoundMechanics;
         private PlaySoundByEventMechanics playDeathSoundMechanics;
         
@@ -25,7 +25,7 @@ namespace Objects
             lookRotationMechanics = new LookRotationMechanics(transform, core.moveComponent.Direction);
             moveAnimMechanics = new CharacterMoveAnimMechanics(animator, core.moveComponent.IsMoving);
             fireAnimMechanics = new CharacterFireAnimMechanics(animator, core.weaponComponent.FireEvent);
-            showMuzzleFlashMechanics = new ShowMuzzleFlashMechanics(muzzleFlash, core.weaponComponent.SpawnBulletEvent);
+            showMuzzleFlashMechanics = new PlayParticlesOnEventMechanics(muzzleFlash, core.weaponComponent.SpawnBulletEvent);
             playShotSoundMechanics = new PlaySoundByEventMechanics(audioSource, shotAudioClip, core.weaponComponent.SpawnBulletEvent);
             playDeathSoundMechanics = new PlaySoundByEventMechanics(audioSource, deathAudioClip, core.healthComponent.DeathEvent);
         }

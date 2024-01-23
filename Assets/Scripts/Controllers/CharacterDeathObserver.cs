@@ -12,20 +12,17 @@ namespace Controllers
         
         private void OnEnable()
         {
-            character.GetObservable<bool>(ObjectApi.IsAlive).Subscribe(OnAliveChanged);
+            character.GetObservable(ObjectApi.DeathEvent).Subscribe(OnDeath);
         }
         
         private void OnDisable()
         {
-            character.GetObservable<bool>(ObjectApi.IsAlive).Unsubscribe(OnAliveChanged);
+            character.GetObservable(ObjectApi.DeathEvent).Unsubscribe(OnDeath);
         }
 
-        private void OnAliveChanged(bool isAlive)
+        private void OnDeath()
         {
-            if (!isAlive)
-            {
-                Destroy(character.gameObject);
-            }
+            Destroy(character.gameObject);
         }
     }
 }

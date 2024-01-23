@@ -22,7 +22,7 @@ namespace GameEngine.Components
         [SerializeField]
         private AtomicVariable<int> hitPoints = new(5);
         
-        [SerializeField]
+        [Get(ObjectApi.DeathEvent), SerializeField]
         private AtomicEvent deathEvent = new();
         
         private DeathMechanics deathMechanics;
