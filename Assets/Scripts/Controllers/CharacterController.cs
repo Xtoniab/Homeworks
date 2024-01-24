@@ -15,12 +15,12 @@ namespace Controllers
 
         private void OnEnable()
         {
-            inputManager.OnFire += Fire;
+            inputManager.OnAttack += Attack;
         }
         
         private void OnDisable()
         {
-            inputManager.OnFire -= Fire;
+            inputManager.OnAttack -= Attack;
         }
 
         private void FixedUpdate()
@@ -29,9 +29,9 @@ namespace Controllers
             character.GetVariable<Vector3>(ObjectApi.MoveDirection).Value = direction;
         }
 
-        private void Fire()
+        private void Attack()
         {
-            character.InvokeAction(ObjectApi.FireAction);
+            character.InvokeAction(ObjectApi.AttackAction);
         }
     }
 }

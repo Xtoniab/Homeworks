@@ -4,7 +4,7 @@
     {
         public const string IsAlive = nameof(IsAlive);
         public const string TakeDamageAction = nameof(TakeDamageAction);
-        public const string FireAction = nameof(FireAction);
+        public const string AttackAction = nameof(AttackAction);
         public const string MoveDirection = nameof(MoveDirection);
         public const string DeathEvent = nameof(DeathEvent);
     }

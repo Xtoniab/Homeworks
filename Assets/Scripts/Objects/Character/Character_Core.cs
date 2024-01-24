@@ -11,35 +11,35 @@ namespace Objects
     {
         [Section] public HealthComponent healthComponent = new();
         [Section] public MoveComponent moveComponent = new();
-        [Section] public WeaponComponent weaponComponent = new();
+        [Section] public AttackComponent attackComponent = new();
+        [Section] public Weapon weapon = new();
         
         public void Compose(BulletSystem bulletSystem)
         {
             healthComponent.Compose();
-            
+            attackComponent.Compose();
+            weapon.Compose(bulletSystem);
+
             moveComponent.Let(it =>
             {
                 it.Compose();
                 it.MoveEnabled.Append(healthComponent.IsAlive);
             });
-
-            weaponComponent.Let(it =>
+            
+            attackComponent.Let(it =>
             {
-                it.Compose(bulletSystem);
-                it.CanFire.Append(healthComponent.IsAlive);
-                it.CanFire.Append(moveComponent.IsMoving.AsNot());
+                it.CanAttack.Append(healthComponent.IsAlive);
+                it.CanAttack.Append(moveComponent.IsMoving.AsNot());
             });
         }
 
         public void OnEnable()
         {
-            weaponComponent.OnEnable();
             healthComponent.OnEnable();
         }
 
         public void OnDisable()
         {
-            weaponComponent.OnDisable();
             healthComponent.OnDisable();
         }
 

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace GameEngine.Components
 {
     [Serializable]
-    public class HealthComponent
+    public class HealthComponent: IDisposable
     {
         public IAtomicValue<bool> IsAlive => isAlive;
         public IAtomicObservable DeathEvent => deathEvent;
@@ -42,6 +42,13 @@ namespace GameEngine.Components
         public void OnDisable()
         {
             deathMechanics.OnDisable();
+        }
+
+        public void Dispose()
+        {
+            isAlive?.Dispose();
+            hitPoints?.Dispose();
+            deathEvent?.Dispose();
         }
     }
 }

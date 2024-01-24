@@ -3,30 +3,30 @@ using UnityEngine;
 
 namespace GameEngine.Mechanics
 {
-    public class CharacterFireAnimMechanics
+    public class ShootAnimMechanics
     {
         private static readonly int Shoot = Animator.StringToHash("Shoot");
         
         private readonly Animator animator;
-        private readonly IAtomicObservable fireEvent;
+        private readonly IAtomicObservable shootEvent;
 
-        public CharacterFireAnimMechanics(Animator animator, IAtomicObservable fireEvent)
+        public ShootAnimMechanics(Animator animator, IAtomicObservable shootEvent)
         {
             this.animator = animator;
-            this.fireEvent = fireEvent;
+            this.shootEvent = shootEvent;
         }
         
         public void OnEnable()
         {
-            fireEvent.Subscribe(PlayFireAnim);
+            shootEvent.Subscribe(PlayShootAnim);
         }
         
         public void OnDisable()
         {
-            fireEvent.Unsubscribe(PlayFireAnim);
+            shootEvent.Unsubscribe(PlayShootAnim);
         }
 
-        private void PlayFireAnim()
+        private void PlayShootAnim()
         {
             animator.SetTrigger(Shoot);
         }

@@ -5,7 +5,7 @@ namespace InputManagement
 {
     public class InputManager : MonoBehaviour
     {
-        public event Action OnFire;
+        public event Action OnAttack;
         public Vector2 MoveDirection { get; private set; }
 
         private void Update()
@@ -14,7 +14,7 @@ namespace InputManagement
 
             if (Input.GetMouseButtonDown(0))
             {
-                OnFire?.Invoke();
+                OnAttack?.Invoke();
             }
 
             if (Input.GetKey(KeyCode.A)) MoveDirection += Vector2.left;

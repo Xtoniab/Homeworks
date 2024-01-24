@@ -3,12 +3,12 @@ using Atomic.Elements;
 
 namespace GameEngine.Mechanics
 {
-    public class SpawnBulletOnFireMechanics
+    public class FireMechanics
     {
         private readonly IAtomicAction spawnBulletAction;
         private readonly AnimationEventReceiver animationEventReceiver;
         
-        public SpawnBulletOnFireMechanics(
+        public FireMechanics(
             IAtomicAction spawnBulletAction,
             AnimationEventReceiver animationEventReceiver)
         {
