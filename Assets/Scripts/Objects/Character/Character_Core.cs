@@ -7,7 +7,7 @@ using Systems;
 namespace Objects
 {
     [Serializable]
-    public class Character_Core
+    public class Character_Core: IDisposable
     {
         [Section] public HealthComponent healthComponent = new();
         [Section] public MoveComponent moveComponent = new();
@@ -46,6 +46,12 @@ namespace Objects
         public void FixedUpdate()
         {
             moveComponent.FixedUpdate();
+        }
+
+        public void Dispose()
+        {
+            healthComponent?.Dispose();
+            weapon?.Dispose();
         }
     }
 }

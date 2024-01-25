@@ -1,4 +1,5 @@
-﻿using Atomic.Objects;
+﻿using System;
+using Atomic.Objects;
 using Systems;
 using UnityEngine;
 
@@ -36,6 +37,11 @@ namespace Objects
         private void Update()
         {
             view.Update();
+        }
+
+        private void OnDestroy()
+        {
+            core.Dispose();
         }
     }
 }
