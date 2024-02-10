@@ -8,6 +8,8 @@ namespace InputManagement
         public event Action OnAttack;
         public Vector2 MoveDirection { get; private set; }
 
+        public bool AttackPressed { get; private set; }
+
         private void Update()
         {
             MoveDirection = Vector2.zero;
@@ -16,6 +18,8 @@ namespace InputManagement
             {
                 OnAttack?.Invoke();
             }
+            
+            AttackPressed = Input.GetMouseButton(0);
 
             if (Input.GetKey(KeyCode.A)) MoveDirection += Vector2.left;
             if (Input.GetKey(KeyCode.D)) MoveDirection += Vector2.right;

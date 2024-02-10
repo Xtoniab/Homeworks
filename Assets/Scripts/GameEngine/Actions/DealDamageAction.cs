@@ -1,5 +1,6 @@
 ﻿using System;
 using Atomic.Elements;
+using Atomic.Extensions;
 using Atomic.Objects;
 using Sirenix.OdinInspector;
 
@@ -18,9 +19,9 @@ namespace GameEngine.Actions
         [Button]
         public void Invoke(AtomicObject obj)
         {
-            if (obj.TryGet(ObjectApi.TakeDamageAction, out IAtomicAction<int> takeDamageAction))
+            if (obj != null && obj.Is(HealthAPI.Damageable))
             {
-                takeDamageAction.Invoke(damage.Value);
+                obj.InvokeAction(HealthAPI.TakeDamageAction, damage.Value);
             }
         }
     }

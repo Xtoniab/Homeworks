@@ -14,7 +14,7 @@ namespace GameEngine.Components
 
         [SerializeField] private AtomicValue<float> lifeTimeSeconds = new(5f);
 
-        [Get(ObjectApi.IsAlive), SerializeField]
+        [Get(HealthAPI.IsAlive), SerializeField]
         private AtomicVariable<bool> isAlive = new(true);
 
         [SerializeField] private Timer timer = new();

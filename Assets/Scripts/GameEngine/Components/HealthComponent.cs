@@ -8,15 +8,16 @@ using UnityEngine;
 namespace GameEngine.Components
 {
     [Serializable]
+    [Is(HealthAPI.Damageable)]
     public class HealthComponent: IDisposable
     {
         public IAtomicValue<bool> IsAlive => isAlive;
         public IAtomicObservable DeathEvent => deathEvent;
 
-        [Get(ObjectApi.IsAlive), SerializeField] 
+        [Get(HealthAPI.IsAlive), SerializeField] 
         private AtomicVariable<bool> isAlive = new(true);
         
-        [Get(ObjectApi.TakeDamageAction), SerializeField]
+        [Get(HealthAPI.TakeDamageAction), SerializeField]
         private TakeDamageAction takeDamageAction = new();
         
         [SerializeField]

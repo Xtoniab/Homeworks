@@ -30,7 +30,7 @@ namespace Systems
             for (var i = activeBullets.Count - 1; i >= 0; i--)
             {
                 var bullet = activeBullets[i];
-                if (bullet.Get<IAtomicValue<bool>>(ObjectApi.IsAlive).Value == false)
+                if (bullet.Get<IAtomicValue<bool>>(HealthAPI.IsAlive).Value == false)
                 {
                     activeBullets.RemoveAt(i);
                     bulletPool.Pool(bullet);

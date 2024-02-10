@@ -11,7 +11,7 @@ namespace Objects
 {
     public class Bullet: AtomicObject
     {
-        [Get(ObjectApi.IsAlive), SerializeField] private AtomicFunction<bool> isAlive = new();
+        [Get(HealthAPI.IsAlive), SerializeField] private AtomicFunction<bool> isAlive = new();
         [SerializeField] private AtomicValue<int> damage = new(1);
         [SerializeField] private AtomicVariable<bool> hitTarget;
         [SerializeField] private DealDamageAction dealDamageAction = new();
